@@ -11,11 +11,12 @@ class Adminmenu extends REST_Controller
 	function __construct()
 	{
 		parent::__construct();
-		$this->load->model('Adminmenumodel', 'adminmenumodel');
+		$this->load->model('transaksiadmin/Adminmenumodel', 'adminmenumodel');
 	}
 
 	public function menu_get(){
-		$returndata = $this->adminmenumodel->getdata();
+    $tipeitem = $this->get('tipeitem');
+		$returndata = $this->adminmenumodel->getdata($tipeitem);
 		if($returndata){
 			$this->response([
 				'status' => true,
@@ -29,3 +30,4 @@ class Adminmenu extends REST_Controller
 		}
 	}
 }
+?>
