@@ -7,21 +7,17 @@ defined('BASEPATH') or exit('No direct script access allowed');
 require APPPATH . 'libraries/REST_Controller.php';
 require APPPATH . 'libraries/Format.php';
 
-class Data extends REST_Controller
+class Cari extends REST_Controller
 {
-
   public function __construct()
   {
     parent::__construct();
-    $this->load->model('transaksiadmin/Database', 'database');
+    $this->load->model('transaksiadmin/Carimodel', 'carimodel');
   }
-
-  public function oneweek_get()
+  public function Caridata_get()
   {
-    $tanggal = $this->get('tanggal');
-
-    $returndata = $this->database->oneweekdata($tanggal);
-
+    $keyword    = $this->get('keyword');
+    $returndata = $this->carimodel->getdata($keyword);
     if (!is_null($returndata)) {
       $this->response([
         'status' => true,
@@ -30,9 +26,9 @@ class Data extends REST_Controller
     } else {
       $this->response([
         'status'  => false,
-        'message' => 'data not found',
+        'message' => 'data tidak ada',
       ], REST_Controller::HTTP_NOT_FOUND);
     }
   }
-  
+
 }

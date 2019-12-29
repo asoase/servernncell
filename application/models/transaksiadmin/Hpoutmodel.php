@@ -1,22 +1,52 @@
 <?php
+use Restserver\Libraries\REST_Controller;
 
 class Hpoutmodel extends CI_Model
 {
-	public function getdata($id){
-		$this->db->select('*');
-		$this->db->where('id =', $id);
-		$returndata = $this->db->get('hp_out')->result_array();
-		return $returndata;
-	}
+  public function getdata($id)
+  {
+    $this->db->select('*');
+    $this->db->where('id', $id);
+    $returndata = $this->db->get('hp_out')->row_array();
+    return $returndata;
+  }
+
   public function putdata($id, $data)
   {
+    $this->db->select('id');
+    $this->db->where('id', $id);
+    $idexist = $this->db->get('hp_out')->row_array();
+    if (is_null($idexist)) {
+      $result = REST_Controller::HTTP_NOT_FOUND;
+      return $result; //not found
+    }
     $arrdata = json_decode($data, true);
     $this->db->where('id', $id);
     $this->db->update('hp_out', $arrdata);
-    $result = 0;
+    $result = REST_Controller::HTTP_NO_CONTENT; //no content
     if ($this->db->affected_rows() > 0) {
-      $result = 1;
+      $result = REST_Controller::HTTP_OK; //success ok
     }
     return $result;
   }
+
+  public function deletedata($id)
+  {
+    $this->db->select('id');
+    $this->db->where('id', $id);
+    $idexist = $this->db->get('hp_out')->row_array();
+    if (is_null($idexist)) {
+      $result = REST_Controller::HTTP_NOT_FOUND;
+      return $result; //not found
+    }
+    $this->db->where('id', $id);
+    $isdeleted = $this->db->delete('hp_out');
+    if ($isdeleted) {
+      $result = REST_Controller::HTTP_OK; //success ok
+    } else {
+      $result = REST_Controller::HTTP_NO_CONTENT; //no content gagal dihapus
+    }
+    return $result;
+  }
+
 }

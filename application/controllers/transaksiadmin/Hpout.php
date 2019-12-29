@@ -18,7 +18,7 @@ class Hpout extends REST_Controller
   {
     $id         = $this->get('id');
     $returndata = $this->hpoutmodel->getdata($id);
-    if ($returndata) {
+    if (!is_null($returndata)) {
       $this->response([
         'status' => true,
         'data'   => $returndata,
@@ -32,18 +32,108 @@ class Hpout extends REST_Controller
   }
   public function item_put()
   {
-    $id      = $this->put('id');
-    $data    = $this->put('dataput');
-    $result  = $this->hpoutmodel->putdata($id, $data);
-    $status  = false;
-    $message = 'data tidak di update /  data yang di kirim sama';
-    if ($result == 1) {
-      $status  = true;
-      $message = 'data sukses di update';
+    $id     = $this->put('id');
+    $data   = $this->put('dataput');
+    $result = $this->hpoutmodel->putdata($id, $data);
+    switch ($result) {
+      case REST_Controller::HTTP_OK:
+        $status     = true;
+        $message    = 'data sukses diupdate';
+        $statuscode = REST_Controller::HTTP_OK;
+        break;
+      case REST_Controller::HTTP_NO_CONTENT:
+        $status     = false;
+        $message    = 'data gagal diupdate / data sama';
+        $statuscode = REST_Controller::HTTP_NO_CONTENT;
+        break;
+      default:
+        $status     = false;
+        $message    = 'data tidak ada';
+        $statuscode = REST_Controller::HTTP_NOT_FOUND;
+        break;
     }
     $this->response([
       'status'  => $status,
       'message' => $message,
-    ], REST_Controller::HTTP_OK);
+    ], $statuscode);
+  }
+  public function item_delete()
+  {
+    $id     = $this->delete('id');
+    $result = $this->hpoutmodel->deletedata($id);
+    switch ($result) {
+      case REST_Controller::HTTP_OK:
+        $status     = true;
+        $message    = 'data sukses dihapus';
+        $statuscode = REST_Controller::HTTP_OK;
+        break;
+      case REST_Controller::HTTP_NO_CONTENT:
+        $status     = false;
+        $message    = 'data gagal dihapus';
+        $statuscode = REST_Controller::HTTP_NO_CONTENT;
+        break;
+      default:
+        $status     = false;
+        $message    = 'data tidak ada';
+        $statuscode = REST_Controller::HTTP_NOT_FOUND;
+        break;
+    }
+    $this->response([
+      'status'  => $status,
+      'message' => $message,
+    ], $statuscode);
+  }
+  public function alternateput_post()
+  {
+    $id     = $this->post('id');
+    $data   = $this->post('dataput');
+    $result = $this->hpoutmodel->putdata($id, $data);
+    switch ($result) {
+      case REST_Controller::HTTP_OK:
+        $status     = true;
+        $message    = 'data sukses diupdate';
+        $statuscode = REST_Controller::HTTP_OK;
+        break;
+      case REST_Controller::HTTP_NO_CONTENT:
+        $status     = false;
+        $message    = 'data gagal diupdate / data sama';
+        $statuscode = REST_Controller::HTTP_NO_CONTENT;
+        break;
+      default:
+        $status     = false;
+        $message    = 'data tidak ada';
+        $statuscode = REST_Controller::HTTP_NOT_FOUND;
+        break;
+    }
+    $this->response([
+      'status'  => $status,
+      'message' => $message,
+    ], $statuscode);
+  }
+  public function alternatedelete_post()
+  {
+    $id     = $this->post('id');
+    $result = $this->hpoutmodel->deletedata($id);
+    switch ($result) {
+      case REST_Controller::HTTP_OK:
+        $status     = true;
+        $message    = 'data sukses dihapus';
+        $statuscode = REST_Controller::HTTP_OK;
+        break;
+      case REST_Controller::HTTP_NO_CONTENT:
+        $status     = false;
+        $message    = 'data gagal dihapus';
+        $statuscode = REST_Controller::HTTP_NO_CONTENT;
+        break;
+      default:
+        $status     = false;
+        $message    = 'data tidak ada';
+        $statuscode = REST_Controller::HTTP_NOT_FOUND;
+        break;
+    }
+    $this->response([
+      'status'  => $status,
+      'message' => $message,
+    ], $statuscode);
   }
 }
