@@ -14,7 +14,7 @@ class Cari extends REST_Controller
     parent::__construct();
     $this->load->model('transaksiadmin/Carimodel', 'carimodel');
   }
-  public function Caridata_get()
+  public function caridata_get()
   {
     $keyword    = $this->get('keyword');
     $returndata = $this->carimodel->getdata($keyword);

@@ -88,7 +88,7 @@ class AllData_model extends CI_Model
 		$query = $this->db->get_where('accesoris', array('id' => $id));
 		return $query->result_array();
 	}
-	
+
 }
 
 ?>

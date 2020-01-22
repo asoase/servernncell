@@ -47,7 +47,7 @@ class Carimodel extends CI_Model
     if ($tipe == 'accesoris') {
       if (!is_null($arrkeyword['kw1'])) {
         if ($arrkeyword['kw1'] != '') {
-          $this->db->where('nama', $arrkeyword['kw1']);
+          $this->db->like('nama', $arrkeyword['kw1']);
           $iskeywordexist = true;
         }
       }
@@ -66,7 +66,12 @@ class Carimodel extends CI_Model
       }
       if (!is_null($arrkeyword['kw3'])) {
         if ($arrkeyword['kw3'] != '') {
+          $this->db->group_start();
           $this->db->where('imei', $arrkeyword['kw3']);
+          if (($tipe == 'servis_out') || ($tipe == 'servis_return')) {
+            $this->db->or_like('kerusakan', $arrkeyword['kw3']);
+          }
+          $this->db->group_end();
           $iskeywordexist = true;
         }
       }
